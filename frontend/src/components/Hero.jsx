@@ -77,6 +77,8 @@ function Hero() {
         onSuccess: () => {
             // Invalidate and refetch the 'todoslist' query after a successful deletion
             queryClient.invalidateQueries('todoslist');
+            toast.success("Todo deleted successfully");
+
         },
     });
 
@@ -89,6 +91,8 @@ function Hero() {
         onSuccess: () => {
             // Invalidate and refetch the 'todoslist' query after a successful deletion
             queryClient.invalidateQueries('todoslist');
+            toast.success("Todo added successfully");
+
         },
     });
 
@@ -96,7 +100,7 @@ function Hero() {
         onSuccess: () => {
             // Invalidate and refetch the 'todoslist' query after a successful deletion
             queryClient.invalidateQueries('todoslist');
-
+            toast.success("Todo edited successfully");
         },
         onError: (error) => {
             console.error('Error editing todo:', error);
