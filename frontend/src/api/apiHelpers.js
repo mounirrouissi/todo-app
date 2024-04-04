@@ -1,7 +1,7 @@
 // apiHelpers.js
 // apiHelpers.js
 
-const BASE_URL = 'http://localhost:8080/api/v1';
+const BASE_URL = 'http://ec2-18-119-162-141.us-east-2.compute.amazonaws.com:8085/api/v1';
 
 const fetchWithErrorHandling = async (url, options = {}) => {
   try {
@@ -10,7 +10,7 @@ const fetchWithErrorHandling = async (url, options = {}) => {
        const errorData = await response.json(); // Assuming the backend sends JSON error data
        throw new Error(errorData.message || 'Network response was not ok');
      }
-     return response.json();
+ 
   } catch (error) {
      console.error('Fetch error:', error.message);
      throw error;

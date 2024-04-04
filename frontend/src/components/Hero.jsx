@@ -72,21 +72,17 @@ function Hero() {
     };
 
 
-       // Define the delete mutation
-       const deleteTodoMutation = useMutation(id => deleteTodo(id), {
+    const deleteTodoMutation = useMutation((id) => deleteTodo(id), {
         onSuccess: () => {
-            // Invalidate and refetch the 'todoslist' query after a successful deletion
-            queryClient.invalidateQueries('todoslist');
-            toast.success("Todo deleted successfully");
-
-        },
-    });
-
-    const handleDelete = (id) => {
-        console.log(" deleting " + id)
+          queryClient.invalidateQueries(); 
+          toast.success("Todo deleted successfully");
+        }
+      });
+      
+      const handleDelete = (id) => {
         deleteTodoMutation.mutate(id);
-    };
-
+      };
+      
     const addMutation = useMutation((formData) => addToDo(formData), {
         onSuccess: () => {
             // Invalidate and refetch the 'todoslist' query after a successful deletion
@@ -114,7 +110,7 @@ function Hero() {
     const { isLoading, error, data: todos } = useQuery(
         'todoslist', 
         async () => {
-        const response = await fetch('http://localhost:8080/api/v1/todos'); // Your API endpoint
+        const response = await fetch('http://ec2-18-119-162-141.us-east-2.compute.amazonaws.com:8085/api/v1/todos'); // Your API endpoint
         return response.json();
     });
 
@@ -175,7 +171,12 @@ console.log("error message:",errorMessage.message)
                 <div>
                     {isLoading ? (
                         <p className='w-full text-9xl'>Loading Todos...</p>
-                    ) : error ? (
+
+                    ) : todos.length === 0 ? (
+                    <p className='text-lg font-bold'>No Todos available. Click the + button to add one.</p>
+                    )
+                    
+                    : error ? (
                         <p>Error: {error.message}</p>
                     ) : (
                         <ul className='text-4xl'>
@@ -188,40 +189,36 @@ console.log("error message:",errorMessage.message)
                 </div>
                 
                 {isOpen &&
-                    <dialogue open className="mb-4 h-1/4 p-10 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-5 rounded-md shadow-xl z-50" >
-                        <form onSubmit={handleSubmit}>
-                            <div className="flex flex-col justify-between space-y-4 mt-10">
+                    <dialogue open className="mb-4 h-auto fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-md shadow-xl z-50 p-8 max-w-md w-full">
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="flex flex-col space-y-4">
                                 <input
                                     type="text"
                                     placeholder="Enter new task"
-                                    ref={descriptionRef} // Assign a ref 
+                                    ref={descriptionRef} // Assign a ref
                                     value={newToDoDescription}
                                     onChange={handleDescriptionChange}
-                                    className="border p-5 text-4xl rounded-lg shadow-sm"
+                                    className="border px-4 py-2 text-lg rounded-lg shadow-sm"
                                 />
                                 <label className="flex items-center gap-2">
                                     <input
                                         type="checkbox"
-                                        ref={isCompletedRef} // Assign a ref 
+                                        ref={isCompletedRef} // Assign a ref
                                         checked={isCompleted} // Assuming isCompleted is a state variable to track completion
                                         onChange={handleCompletionChange} // Assuming handleCompletionChange is a function to update isCompleted
                                         className="border p-2 h-5 w-5"
                                     />
-                                    <span className="text-lg">Completed</span>
+                                    <span>Completed</span>
                                 </label>
                             </div>
-                            <div className="flex justify-center mt-4">
-                                <button type="submit"  className="border p-3 rounded-full bg-green-500 text-white shadow-lg">
-                                    {/* <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14m7-7H5" />
-                                    </svg> */}
+                            <div className="flex justify-center">
+                                <button type="submit" className="px-4 py-2 rounded-md bg-green-500 text-white shadow">
                                     Add Task
                                 </button>
                             </div>
-                          
                         </form>
-                        <button type="button" className="absolute top-0 right-0 border p-3 rounded-full bg-red-500 text-white" onClick={() => setIsOpen(false)}>
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <button type="button" className="absolute top-0 right-0 border p-2 rounded-full bg-red-500 text-white" onClick={() => setIsOpen(false)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
