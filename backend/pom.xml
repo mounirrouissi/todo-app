@@ -76,6 +76,7 @@
 
 
 		</plugins>
+		<finalName>todo-backend</finalName>
 	</build>
 
 </project>
