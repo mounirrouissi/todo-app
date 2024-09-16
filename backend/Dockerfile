@@ -1,8 +1,6 @@
-#FROM openjdk:19-alpine
-#
-#ARG JAR_FILE=target/*.jar
-#COPY ${JAR_FILE} app.jar
-#
-#EXPOSE ${PORT}
-#
-#ENTRYPOINT ["java","-jar","app.jar"]
+FROM eclipse-temurin:17-jdk-alpine
+WORKDIR /
+VOLUME /tmp
+COPY target/*.jar todo-backend.jar
+ENTRYPOINT ["java","-jar","todo-backend.jar"]
+EXPOSE 8086
